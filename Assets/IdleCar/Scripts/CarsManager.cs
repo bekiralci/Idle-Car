@@ -8,22 +8,6 @@ using UnityEngine;
 public class CarsManager : MonoBehaviour
 {
 
-    public Dictionary<int, List<Car>> currentRunnerBases = new();
-
-    [SerializeField] private List<Car> runners_1;
-    [SerializeField] private List<Car> runners_2;
-    [SerializeField] private List<Car> runners_3;
-    [SerializeField] private List<Car> runners_4;
-
-    private void Awake()
-    {
-        currentRunnerBases.Add(0, runners_1);
-        currentRunnerBases.Add(1, runners_2);
-        currentRunnerBases.Add(2, runners_3);
-        currentRunnerBases.Add(3, runners_4);
-    }
-
-   
     #region EventManager
 
     private void OnEnable()
@@ -35,19 +19,30 @@ public class CarsManager : MonoBehaviour
     {
         EventManager.CarsManager -= GetThis;
     }
-
-    #endregion
-
     private CarsManager GetThis()
     {
         return this;
     }
+    #endregion
 
-    //public void AddRunner(CarsManager runner)
-    //{
+    public Dictionary<int, List<Car>> CarsOnTheGame = new();
 
-    //    currentRunnerBases[runner._level - 1].Add(runner);
+    [SerializeField] private List<Car> Cars_Level_1;
+    [SerializeField] private List<Car> Cars_Level_2;
+    [SerializeField] private List<Car> Cars_Level_3;
+    [SerializeField] private List<Car> Cars_Level_4;
 
-    //}
+    private void Awake()
+    {
+        CarsOnTheGame.Add(0, Cars_Level_1);
+        CarsOnTheGame.Add(1, Cars_Level_2);
+        CarsOnTheGame.Add(2, Cars_Level_3);
+        CarsOnTheGame.Add(3, Cars_Level_4);
+    }
+
+    public void ToList(int _level)
+    {
+        CarsOnTheGame.Add(_level, CarsOnTheGame[_level - 1]);
+    }
 
 }
