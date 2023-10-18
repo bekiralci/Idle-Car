@@ -1,18 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Car : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
+
+    public int _level;
+
+    public void OnCalled()
     {
-        
+        EventManager.CarsManager.Invoke().ToList(_level);
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
 }
