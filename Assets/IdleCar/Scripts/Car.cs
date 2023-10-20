@@ -1,4 +1,5 @@
 using PathCreation.Examples;
+using System.Collections;
 using UnityEngine;
 
 public class Car : MonoBehaviour
@@ -6,14 +7,16 @@ public class Car : MonoBehaviour
 
     public int _level;
 
-    public void SetPath()
+    public void SetPathNPos()
     {
-        GetComponent<PathFollower>().pathCreator = EventManager.RoadManager.Invoke().roads[_level - 1];
+        PathFollower thisPathFollower = GetComponent<PathFollower>();
+        thisPathFollower.pathCreator = EventManager.RoadManager.Invoke().roads[_level - 1];
+        thisPathFollower.distanceTravelled = Random.Range(0, thisPathFollower.pathCreator.path.length);
     }
 
-    public void OnCalled()
+    public void OnCalled()  
     {
-        SetPath();
+        SetPathNPos();
         EventManager.CarsManager.Invoke().ToGameList(this, _level);
         gameObject.SetActive(true);
     }
