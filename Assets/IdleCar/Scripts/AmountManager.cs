@@ -1,15 +1,9 @@
-using DG.Tweening;
-using DG.Tweening.Core.Easing;
-using System.Collections;
-using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using static UnityEngine.Rendering.DebugUI;
 
 public class AmountManager : MonoBehaviour
 {
-
-    [SerializeField] private UIItemMerge mergeUIItem;
 
     public float _amount;
 
@@ -18,31 +12,24 @@ public class AmountManager : MonoBehaviour
     private void Start()
     {
         UpdateText();
-
         EventManager.ButtonManager.Invoke().ButtonStateControl();
     }
 
     #region Enable/Disable/Event
-
     private void OnEnable()
     {
-
         EventManager.AmountManager += GetThis;
-
     }
 
     private void OnDisable()
     {
-
         EventManager.AmountManager -= GetThis;
-
     }
 
     public AmountManager GetThis()
     {
         return this;
     }
-
     #endregion
 
     public void AmountUpdate(float value)
@@ -55,7 +42,7 @@ public class AmountManager : MonoBehaviour
         amountText.text = ReturnAmount((int)_amount).ToString();
     }
 
-    string ReturnAmount(int _value)
+    string ReturnAmount(float _value)
     {
         if (_value >= 100000000)
         {
@@ -82,17 +69,22 @@ public class AmountManager : MonoBehaviour
         return _value.ToString("#");
     }
 
+    public void AddAmount(float value)
+    {
+        AmountUpdate(value);
+        UpdateText();
+        UIItemMerge.instance.MergeBTNControl();
+        EventManager.ButtonManager.Invoke().ButtonStateControl();
+    }
+
     public bool SetAmount(float value)
     {
         if (_amount >= value)
         {
             AmountUpdate(-value);
             UpdateText();
-
-            mergeUIItem.MergeBTNControl();
-
+            UIItemMerge.instance.MergeBTNControl();
             EventManager.ButtonManager.Invoke().ButtonStateControl();
-
             return true;
         }
         return false;
@@ -100,17 +92,11 @@ public class AmountManager : MonoBehaviour
 
     public bool AmountCheck(float value)
     {
-
-
         if (_amount >= value)
         {
-
             return true;
-
         }
-
         return false;
-
     }
 
 }

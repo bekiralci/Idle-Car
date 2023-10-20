@@ -1,8 +1,4 @@
-using DG.Tweening.Core.Easing;
-using System.Collections;
 using System.Collections.Generic;
-using System.Numerics;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class CarsManager : MonoBehaviour
@@ -25,24 +21,40 @@ public class CarsManager : MonoBehaviour
     }
     #endregion
 
-    public Dictionary<int, List<Car>> CarsOnTheGame = new();
+    [SerializeField] private List<Car> car_Prefabs;
 
-    [SerializeField] private List<Car> Cars_Level_1;
-    [SerializeField] private List<Car> Cars_Level_2;
-    [SerializeField] private List<Car> Cars_Level_3;
-    [SerializeField] private List<Car> Cars_Level_4;
+    public Dictionary<int, Queue<Car>> MainCarList = new();
+    public Dictionary<int, Queue<Car>> CarsOnTheGame = new();
 
     private void Awake()
     {
-        CarsOnTheGame.Add(0, Cars_Level_1);
-        CarsOnTheGame.Add(1, Cars_Level_2);
-        CarsOnTheGame.Add(2, Cars_Level_3);
-        CarsOnTheGame.Add(3, Cars_Level_4);
+        for (int i = 0; i < car_Prefabs.Count; i++)
+        {
+            MainCarList.Add(i, EventManager.ObjectFactory.Invoke().CreateTheWantObject(car_Prefabs[i].gameObject, 15));
+            CarsOnTheGame.Add(i, new Queue<Car>());
+        }
     }
 
-    public void ToList(int _level)
+    public void ToMainList(Car car, int _level)
     {
-        CarsOnTheGame.Add(_level, CarsOnTheGame[_level - 1]);
+        MainCarList[_level - 1].Enqueue(car);
     }
+
+    public void ToGameList(Car car, int _level)
+    {
+        CarsOnTheGame[_level - 1].Enqueue(car);
+    }
+
+    //public List<Car> ReturnCars(int _level)
+    //{
+    //    List<Car> list = new();
+
+    //    for (int i = 0; i < 3; i++)
+    //    {
+    //        list.Add(MainCarList[_level - 1].Dequeue());
+    //    }
+
+    //    return list;
+    //}
 
 }
